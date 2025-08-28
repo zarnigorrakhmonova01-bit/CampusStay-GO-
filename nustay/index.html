@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CampusStay GO!</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root{
+      --bg:#0d0331;           /* deep purple */
+      --bg-2:#1b0b57;         /* mid purple */
+      --accent:#7c3aed;       /* violet */
+      --text:#f8f8ff;
+      --muted:#cfcaf7;
+      --pill:#2a176e;
+      --card:#140543;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";background:linear-gradient(180deg,var(--bg) 0%, #170749 30%, #10053b 100%);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:0 16px}
+
+    /* Top announcement */
+    .announcement{background:linear-gradient(90deg,#6320ff,#9a4cfe); text-align:center; font-weight:700; padding:14px 10px}
+    .announcement small{display:block;opacity:.9;font-weight:500}
+
+    /* NAVBAR */
+    .navbar{position:sticky; top:0; z-index:50; background:#1a0a4b; transition:box-shadow .25s, transform .2s;}
+    .navbar.scrolled{box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    .nav-inner{display:flex;align-items:center;gap:18px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.3px}
+    .brand .logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#6f36ff;box-shadow:0 6px 18px rgba(97,62,255,.6)}
+    .brand span{font-size:20px}
+    .nav-links{display:flex;gap:14px;margin-left:10px;flex-wrap:wrap}
+    .nav-links a{padding:8px 12px;border-radius:12px;background:transparent;color:var(--muted);font-weight:600}
+    .nav-links a:hover, .nav-links a.active{background:#2a176e;color:white}
+    .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+    .btn{border:0; cursor:pointer; padding:10px 14px;border-radius:12px;font-weight:700}
+    .btn.ghost{background:#2a176e;color:#fff}
+    .btn.primary{background:#20d39b;color:#071b15}
+
+    /* Feature strip (5 colorful boxes) */
+    .features{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:18px 0}
+    .feature{border-radius:18px;padding:16px;min-height:86px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow)}
+    .feature svg{width:30px;height:30px;flex:0 0 auto}
+    .feature h4{margin:0 0 4px;font-size:16px}
+    .feature p{margin:0;font-size:13px;opacity:.9}
+    .f1{background:#00d0ff}
+    .f2{background:#22c55e}
+    .f3{background:#f59e0b}
+    .f4{background:#ef4444}
+    .f5{background:#a78bfa}
+    .feature, .feature *{color:#0e0338}
+
+    /* Tabs row (News, Work... like) under navbar */
+    .tabs{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+    .tab{background:#241061;border:1px solid #3f2b87;color:#e9e7ff;font-weight:700;border-radius:999px;padding:8px 14px}
+
+    /* Hero ribbon */
+    .ribbon{margin:18px 0;background:linear-gradient(90deg,#6a28ff,#00e5ff);padding:16px;border-radius:16px;text-align:center;font-weight:900;box-shadow:var(--shadow);color:#0b0534}
+
+    /* Trending Collections - auto scrolling pills */
+    .trending{position:relative;overflow:hidden;background:#11063a;border-radius:16px;padding:10px;margin:14px 0;border:1px solid #26146a}
+    .trend-track{display:flex;gap:12px;white-space:nowrap;will-change:transform;animation:scroll 22s linear infinite}
+    .trend-pill{background:#2a176e;color:#e9e7ff;border:1px solid #3f2b87;border-radius:999px;padding:8px 14px;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+    .trend-pill svg{width:16px;height:16px}
+    @keyframes scroll{from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* Sections title */
+    .section-title{margin:22px 0 10px;font-size:20px;font-weight:900}
+
+    /* Cards grid (students & comments) */
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:linear-gradient(180deg,#1a0a4b,#13073a);border:1px solid #2a176e;border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    .card-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:#7c3aed;color:#fff}
+    .card h4{margin:0}
+    .meta{font-size:12px;color:#c7c4ff}
+    .card p{margin:10px 0 12px; color:#e9e7ff}
+    .badge{display:inline-block;background:#2a176e;border:1px solid #3f2b87;border-radius:999px;padding:4px 10px;font-size:12px;margin-right:6px;margin-bottom:6px}
+    .actions{display:flex;gap:10px;margin-top:10px}
+    .actions .btn{padding:10px 12px}
+
+    /* Footer */
+    footer{margin:36px 0 60px;color:#bdb9ff;opacity:.9}
+
+    /* Responsive */
+    @media (max-width:1100px){
+      .features{grid-template-columns:repeat(3,1fr)}
+      .cards{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:720px){
+      .features{grid-template-columns:1fr 1fr}
+      .nav-links{display:none}
+      .cards{grid-template-columns:1fr}
+    }
+  </style>
+
+  
+</head>
+<body>
+  <!-- Announcement like "Kahoot! NEW" bar -->
+  <div class="announcement">
+    The NEW and easy way for students to find housing & host families — for FREE!
+    <small>Explore trusted hosts, dorms, flats and student communities worldwide.</small>
+  </div>
+
+  <!-- Sticky Navbar -->
+  <header id="navbar" class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#">
+        <div class="logo" aria-hidden="true">
+          <!-- Simple house+pin glyph -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 11L12 3l9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><circle cx="12" cy="14" r="2"/>
+          </svg>
+        </div>
+        <span>CampusStay GO!</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#news" class="active">News</a>
+        <a href="#hosts">Host Families</a>
+        <a href="#mylocation">My Location</a>
+        <a href="#home">Home</a>
+        <a href="#discover">Discover</a>
+      </nav>
+
+      <div class="nav-right">
+        <button class="btn ghost" onclick="alert('Enter game PIN? Just a fun button!')">Join</button>
+        <button class="btn primary" onclick="alert('Create account flow…')">Sign up FREE</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="tabs" role="tablist">
+        <div class="tab">News</div>
+        <div class="tab">Work</div>
+        <div class="tab">School</div>
+        <div class="tab">Higher Education</div>
+        <div class="tab">Home</div>
+        <div class="tab">Study</div>
+        <div class="tab">Discover</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Five colorful feature boxes with icons -->
+    <section aria-label="Quick actions" class="features">
+      <button class="feature f1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 11L12 3l9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/>
+        </svg>
+        <div>
+          <h4 class="hsf">Host Families</h4>
+          <p>Find verified homestays with caring hosts.</p>
+        </div>
+      </button>
+
+      <button class="feature f2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <div>
+          <h4>Location</h4>
+          <p>Search near your campus or by city.</p>
+        </div>
+      </button>
+
+      <button class="feature f3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="7" width="18" height="13" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/>
+        </svg>
+        <div>
+          <h4 class="flat">Flats</h4>
+          <p>Affordable studios and shared apartments.</p>
+        </div>
+      </button>
+
+      <a href="new.html"><button class="feature f4">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 4h16v6H4z"/><path d="M6 10v10h12V10"/>
+          <path d="M9 14h6M9 17h6"/>
+        </svg>
+        <div>
+          <h4 class="reg">Registration</h4>
+          <p>Apply, upload docs, and secure your spot.</p>
+        </div>
+      </button> </a>
+
+      <button class="feature f5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 12v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7"/>
+          <path d="M2 7l10 7L22 7"/>
+        </svg>
+        <div>
+          <h4>Contact</h4>
+          <p>Message hosts and student helpers directly.</p>
+        </div>
+      </button>
+    </section>
+
+    <!-- Ribbon / hero bar -->
+    <section class="ribbon" id="news">
+      Kickstart the semester with <strong>CampusStay ONE</strong> — your complete housing & community toolkit!
+    </section>
+
+    <!-- Trending collections (auto-scroll right-to-left) -->
+    <section aria-label="Trending collections" class="trending">
+      <div class="trend-track" id="trendTrack">
+        <div class="set" aria-hidden="false">
+          <span class="trend-pill">🏠 Dorm deals</span>
+          <span class="trend-pill">👨‍👩‍👧 Host families</span>
+          <span class="trend-pill">📍 Near my location</span>
+          <span class="trend-pill">🛏️ Private rooms</span>
+          <span class="trend-pill">👯 Roommate finder</span>
+          <span class="trend-pill">🧳 Airport pickup</span>
+          <span class="trend-pill">🚌 City transport</span>
+          <span class="trend-pill">🍜 Cheap eats</span>
+          <span class="trend-pill">💼 Part‑time jobs</span>
+          <span class="trend-pill">🎓 University guides</span>
+          <span class="trend-pill">📝 Registration help</span>
+          <span class="trend-pill">💬 Student support</span>
+        </div>
+        <!-- duplicated for seamless loop -->
+        <div class="set" aria-hidden="true">
+          <span class="trend-pill">🏠 Dorm deals</span>
+          <span class="trend-pill">👨‍👩‍👧 Host families</span>
+          <span class="trend-pill">📍 Near my location</span>
+          <span class="trend-pill">🛏️ Private rooms</span>
+          <span class="trend-pill">👯 Roommate finder</span>
+          <span class="trend-pill">🧳 Airport pickup</span>
+          <span class="trend-pill">🚌 City transport</span>
+          <span class="trend-pill">🍜 Cheap eats</span>
+          <span class="trend-pill">💼 Part‑time jobs</span>
+          <span class="trend-pill">🎓 University guides</span>
+          <span class="trend-pill">📝 Registration help</span>
+          <span class="trend-pill">💬 Student support</span>
+        </div>
+      </div>
+    
+    </section>
+
+    <!-- Sections for 3 columns like Kahoot: Business/Teachers/Students; adapted -->
+    <section id="discover">
+      <div class="section-title">Connect with students and hosts</div>
+      <div class="cards">
+        <!-- Card 1 -->
+        <article class="card">
+          <div class="card-header">
+            <div class="avatar">AM</div>
+            <div>
+              <h4>Amina — Student Mentor</h4>
+              <div class="meta">Berlin, Germany • TU Berlin</div>
+            </div>
+          </div>
+          <p>"I help new students find safe rooms near Charlottenburg. Ask me about visas, deposits, and tram lines."</p>
+          <div>
+            <span class="badge">#comments 128</span>
+            <span class="badge">#contact</span>
+            <span class="badge">#female host list</span>
+          </div>
+          <div class="actions">
+            <button class="btn ghost" onclick="alert('Profile opened')">View profile</button>
+            <button class="btn primary" onclick="alert('Message sent!')">Message</button>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="card">
+          <div class="card-header">
+            <div class="avatar" style="background:#22c55e">JK</div>
+            <div>
+              <h4>Jason — Host Family</h4>
+              <div class="meta">Boston, USA • Near Northeastern</div>
+            </div>
+          </div>
+          <p>Quiet room, breakfast included. We hosted 12 international students. 5‑minute walk to the Orange Line.</p>
+          <div>
+            <span class="badge">#comments 54</span>
+            <span class="badge">#contact</span>
+            <span class="badge">#verified host</span>
+          </div>
+          <div class="actions">
+            <button class="btn ghost">View profile</button>
+            <button class="btn primary">Message</button>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="card">
+          <div class="card-header">
+            <div class="avatar" style="background:#f59e0b">SR</div>
+            <div>
+              <h4>Sofia — Flatmate Group</h4>
+              <div class="meta">Barcelona, Spain • UPC</div>
+            </div>
+          </div>
+          <p>Looking for 1 female flatmate, shared 3‑bed near Diagonal. Pets okay. Contract available in English.</p>
+          <div>
+            <span class="badge">#comments 76</span>
+            <span class="badge">#contact</span>
+            <span class="badge">#roommate</span>
+          </div>
+          <div class="actions">
+            <button class="btn ghost">View profile</button>
+            <button class="btn primary">Message</button>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="card">
+          <div class="card-header">
+            <div class="avatar" style="background:#ef4444">LT</div>
+            <div>
+              <h4>Linh — Student Helper</h4>
+              <div class="meta">Hanoi, Vietnam • NEU</div>
+            </div>
+          </div>
+          <p>I translate rental contracts and help with registration (police & campus). Ask me for a checklist!</p>
+          <div>
+            <span class="badge">#comments 33</span>
+            <span class="badge">#registration</span>
+          </div>
+          <div class="actions">
+            <button class="btn ghost">View profile</button>
+            <button class="btn primary">Message</button>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="card">
+          <div class="card-header">
+            <div class="avatar" style="background:#0ea5e9">MS</div>
+            <div>
+              <h4>Mohamed — City Buddy</h4>
+              <div class="meta">Cairo, Egypt • GUC</div>
+            </div>
+          </div>
+          <p>Airport pickup + SIM card set‑up. I also keep a list of trusted dorm managers close to campus gates.</p>
+          <div>
+            <span class="badge">#comments 41</span>
+            <span class="badge">#airport</span>
+          </div>
+          <div class="actions">
+            <button class="btn ghost">View profile</button>
+            <button class="btn primary">Message</button>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="card">
+          <div class="card-header">
+            <div class="avatar" style="background:#a78bfa">NZ</div>
+            <div>
+              <h4>Noor — Women’s Host List</h4>
+              <div class="meta">Dubai, UAE • AUD</div>
+            </div>
+          </div>
+          <p>Curated list of female‑only host families and safe transport links. Weekly updates + reviews.</p>
+          <div>
+            <span class="badge">#comments 89</span>
+            <span class="badge">#contact</span>
+          </div>
+          <div class="actions">
+            <button class="btn ghost">View profile</button>
+            <button class="btn primary">Message</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      © 2025 CampusStay GO! • Made for international students. Privacy • Terms • Help
+    </footer>
+  </main>
+
+  <script>
+    // Sticky navbar shadow on scroll
+    const navbar = document.getElementById('navbar');
+    const onScroll = () => {
+      if(window.scrollY > 2){ navbar.classList.add('scrolled'); }
+      else { navbar.classList.remove('scrolled'); }
+    };
+    document.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+
+    // Pause trending auto-scroll on hover (by toggling animation-play-state)
+    const trending = document.querySelector('.trending');
+    const track = document.getElementById('trendTrack');
+    trending.addEventListener('mouseenter', ()=>{ track.style.animationPlayState = 'paused'; });
+    trending.addEventListener('mouseleave', ()=>{ track.style.animationPlayState = 'running'; });
+
+    // Simple smooth scroll for navbar links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+  </script>
+
+  
+</body>
+</html>

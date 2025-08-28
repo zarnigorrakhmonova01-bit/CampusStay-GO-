@@ -1,0 +1,13 @@
+.trend-pill:hover{
+transition: all 0.5s ;
+background-color: rgba(94, 52, 161, 0.837);
+}
+.tab:hover{
+    transition: all 0.5s ;
+    background-color: rgba(89, 35, 205, 0.859);
+
+}
+.feature f4:hover{
+    transition: all 0.5s;
+    background-color: rgb(245, 245, 220);
+}
